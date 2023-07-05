@@ -15,6 +15,20 @@ const LoginScreen = () => {
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleFormValue = () => {
+    const formData = {
+      email: email,
+      password: password,
+    };
+    console.log(formData);
+
+    setEmail("");
+    setPassword("");
+  };
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -51,9 +65,6 @@ const LoginScreen = () => {
 
   const handleBlur = (value) => {
     switch (value) {
-      case "name":
-        setIsFocusedName(false);
-        break;
       case "email":
         setIsFocusedEmail(false);
         break;
@@ -73,6 +84,8 @@ const LoginScreen = () => {
       <View style={styles.inputWrapper}>
         <TextInput
           name="email"
+          value={email}
+          onChangeText={setEmail}
           onFocus={() => handleFocus("email")}
           onBlur={() => handleBlur("email")}
           style={[styles.input, isFocusedEmail && styles.inputFocused]}
@@ -81,6 +94,8 @@ const LoginScreen = () => {
         <View style={styles.passwordWrapper}>
           <TextInput
             name="password"
+            value={password}
+            onChangeText={setPassword}
             onFocus={() => handleFocus("password")}
             onBlur={() => handleBlur("password")}
             style={[styles.input, isFocusedPassword && styles.inputFocused]}
@@ -93,7 +108,9 @@ const LoginScreen = () => {
       </View>
 
       <TouchableOpacity style={styles.singUp}>
-        <Text style={styles.singUpText}>Увійти</Text>
+        <Text onPress={handleFormValue} style={styles.singUpText}>
+          Увійти
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.signIn}>
         <Text style={styles.signInText}>Немає акаунту? Зареєструватися</Text>

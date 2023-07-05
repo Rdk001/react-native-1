@@ -15,6 +15,22 @@ const RegistrationScreen = () => {
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
 
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleFormValue = () => {
+    const formData = {
+      name: name,
+      email: email,
+      password: password,
+    };
+    console.log(formData);
+    setName("");
+    setEmail("");
+    setPassword("");
+  };
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -78,29 +94,39 @@ const RegistrationScreen = () => {
         </TouchableOpacity>
       </View>
       <Text style={styles.text}>Реєстрація</Text>
+
       <View style={styles.inputWrapper}>
         <TextInput
           name="name"
+          value={name}
+          onChangeText={setName}
           onFocus={() => handleFocus("name")}
           onBlur={() => handleBlur("name")}
           style={[styles.input, isFocusedName && styles.inputFocused]}
           placeholder="Логін"
         />
+
         <TextInput
           name="email"
+          value={email}
+          onChangeText={setEmail}
           onFocus={() => handleFocus("email")}
           onBlur={() => handleBlur("email")}
           style={[styles.input, isFocusedEmail && styles.inputFocused]}
           placeholder="Адреса електронної пошти"
         />
+
         <View style={styles.passwordWrapper}>
           <TextInput
             name="password"
+            value={password}
+            onChangeText={setPassword}
             onFocus={() => handleFocus("password")}
             onBlur={() => handleBlur("password")}
             style={[styles.input, isFocusedPassword && styles.inputFocused]}
             placeholder="Пароль"
           />
+
           <TouchableOpacity style={styles.passwordBtn}>
             <Text style={styles.passwordBtnText}>Показати</Text>
           </TouchableOpacity>
@@ -108,7 +134,9 @@ const RegistrationScreen = () => {
       </View>
 
       <TouchableOpacity style={styles.singUp}>
-        <Text style={styles.singUpText}>Зареєструватися</Text>
+        <Text onPress={handleFormValue} style={styles.singUpText}>
+          Зареєструватися
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.signIn}>
         <Text style={styles.signInText}>Вже є акаунт? Увійти</Text>
@@ -133,7 +161,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   containerKeyboardOpen: {
-    marginTop: Platform.OS === "ios" ? 125 : 185,
+    marginTop: Platform.OS === "ios" ? 125 : 150,
+    paddingTop: Platform.OS === "ios" ? 0 : 50,
   },
   addPhoto: {
     position: "absolute",
