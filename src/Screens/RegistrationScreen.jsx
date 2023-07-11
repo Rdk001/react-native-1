@@ -7,7 +7,11 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
+  TouchableWithoutFeedback,
+  ImageBackground,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import PhotoBg from "../assets/images/photoBg.jpg";
 
 const RegistrationScreen = () => {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
@@ -18,6 +22,8 @@ const RegistrationScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigation = useNavigation();
 
   const handleFormValue = () => {
     const formData = {
@@ -85,67 +91,93 @@ const RegistrationScreen = () => {
   };
 
   return (
-    <View
-      style={[styles.container, keyboardOpen && styles.containerKeyboardOpen]}
-    >
-      <View style={styles.addPhoto}>
-        <TouchableOpacity style={styles.btnAddPhoto}>
-          <Text style={styles.btnAddPhotoText}>+</Text>
-        </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.wrapper}>
+        <ImageBackground source={PhotoBg} style={styles.image}>
+          <View
+            style={[
+              styles.container,
+              keyboardOpen && styles.containerKeyboardOpen,
+            ]}
+          >
+            <View style={styles.addPhoto}>
+              <TouchableOpacity style={styles.btnAddPhoto}>
+                <Text style={styles.btnAddPhotoText}>+</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.text}>Реєстрація</Text>
+
+            <View style={styles.inputWrapper}>
+              <TextInput
+                name="name"
+                value={name}
+                onChangeText={setName}
+                onFocus={() => handleFocus("name")}
+                onBlur={() => handleBlur("name")}
+                style={[styles.input, isFocusedName && styles.inputFocused]}
+                placeholder="Логін"
+              />
+
+              <TextInput
+                name="email"
+                value={email}
+                onChangeText={setEmail}
+                onFocus={() => handleFocus("email")}
+                onBlur={() => handleBlur("email")}
+                style={[styles.input, isFocusedEmail && styles.inputFocused]}
+                placeholder="Адреса електронної пошти"
+              />
+
+              <View style={styles.passwordWrapper}>
+                <TextInput
+                  name="password"
+                  value={password}
+                  onChangeText={setPassword}
+                  onFocus={() => handleFocus("password")}
+                  onBlur={() => handleBlur("password")}
+                  style={[
+                    styles.input,
+                    isFocusedPassword && styles.inputFocused,
+                  ]}
+                  placeholder="Пароль"
+                />
+
+                <TouchableOpacity style={styles.passwordBtn}>
+                  <Text style={styles.passwordBtnText}>Показати</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <TouchableOpacity style={styles.singUp}>
+              <Text
+                onPress={() => {
+                  handleFormValue();
+                  navigation.navigate("Home", {
+                    screen: "PostScreen",
+                  });
+                }}
+                style={styles.singUpText}
+              >
+                Зареєструватися
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Login")}
+              style={styles.signIn}
+            >
+              <Text style={styles.signInText}>Вже є акаунт? Увійти</Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
       </View>
-      <Text style={styles.text}>Реєстрація</Text>
-
-      <View style={styles.inputWrapper}>
-        <TextInput
-          name="name"
-          value={name}
-          onChangeText={setName}
-          onFocus={() => handleFocus("name")}
-          onBlur={() => handleBlur("name")}
-          style={[styles.input, isFocusedName && styles.inputFocused]}
-          placeholder="Логін"
-        />
-
-        <TextInput
-          name="email"
-          value={email}
-          onChangeText={setEmail}
-          onFocus={() => handleFocus("email")}
-          onBlur={() => handleBlur("email")}
-          style={[styles.input, isFocusedEmail && styles.inputFocused]}
-          placeholder="Адреса електронної пошти"
-        />
-
-        <View style={styles.passwordWrapper}>
-          <TextInput
-            name="password"
-            value={password}
-            onChangeText={setPassword}
-            onFocus={() => handleFocus("password")}
-            onBlur={() => handleBlur("password")}
-            style={[styles.input, isFocusedPassword && styles.inputFocused]}
-            placeholder="Пароль"
-          />
-
-          <TouchableOpacity style={styles.passwordBtn}>
-            <Text style={styles.passwordBtnText}>Показати</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.singUp}>
-        <Text onPress={handleFormValue} style={styles.singUpText}>
-          Зареєструватися
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.signIn}>
-        <Text style={styles.signInText}>Вже є акаунт? Увійти</Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    height: "100%",
+  },
   container: {
     position: "relative",
     marginTop: "auto",
@@ -161,8 +193,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   containerKeyboardOpen: {
-    marginTop: Platform.OS === "ios" ? 125 : 150,
-    paddingTop: Platform.OS === "ios" ? 0 : 50,
+    marginTop: Platform.OS === "ios" ? 125 : 125,
+    paddingTop: Platform.OS === "ios" ? 0 : 20,
+  },
+  image: {
+    flex: 1,
   },
   addPhoto: {
     position: "absolute",

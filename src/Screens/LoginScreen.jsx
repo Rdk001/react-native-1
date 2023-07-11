@@ -8,7 +8,11 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
+  TouchableWithoutFeedback,
+  ImageBackground,
 } from "react-native";
+import PhotoBg from "../assets/images/photoBg.jpg";
+import { useNavigation } from "@react-navigation/native";
 
 const LoginScreen = () => {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
@@ -17,6 +21,8 @@ const LoginScreen = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigation = useNavigation();
 
   const handleFormValue = () => {
     const formData = {
@@ -77,49 +83,77 @@ const LoginScreen = () => {
   };
 
   return (
-    <View
-      style={[styles.container, keyboardOpen && styles.containerKeyboardOpen]}
-    >
-      <Text style={styles.text}>Увійти</Text>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          name="email"
-          value={email}
-          onChangeText={setEmail}
-          onFocus={() => handleFocus("email")}
-          onBlur={() => handleBlur("email")}
-          style={[styles.input, isFocusedEmail && styles.inputFocused]}
-          placeholder="Адреса електронної пошти"
-        />
-        <View style={styles.passwordWrapper}>
-          <TextInput
-            name="password"
-            value={password}
-            onChangeText={setPassword}
-            onFocus={() => handleFocus("password")}
-            onBlur={() => handleBlur("password")}
-            style={[styles.input, isFocusedPassword && styles.inputFocused]}
-            placeholder="Пароль"
-          />
-          <TouchableOpacity style={styles.passwordBtn}>
-            <Text style={styles.passwordBtnText}>Показати</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.wrapper}>
+        <ImageBackground source={PhotoBg} style={styles.image}>
+          <View
+            style={[
+              styles.container,
+              keyboardOpen && styles.containerKeyboardOpen,
+            ]}
+          >
+            <Text style={styles.text}>Увійти</Text>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                name="email"
+                value={email}
+                onChangeText={setEmail}
+                onFocus={() => handleFocus("email")}
+                onBlur={() => handleBlur("email")}
+                style={[styles.input, isFocusedEmail && styles.inputFocused]}
+                placeholder="Адреса електронної пошти"
+              />
+              <View style={styles.passwordWrapper}>
+                <TextInput
+                  name="password"
+                  value={password}
+                  onChangeText={setPassword}
+                  onFocus={() => handleFocus("password")}
+                  onBlur={() => handleBlur("password")}
+                  style={[
+                    styles.input,
+                    isFocusedPassword && styles.inputFocused,
+                  ]}
+                  placeholder="Пароль"
+                />
+                <TouchableOpacity style={styles.passwordBtn}>
+                  <Text style={styles.passwordBtnText}>Показати</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
 
-      <TouchableOpacity style={styles.singUp}>
-        <Text onPress={handleFormValue} style={styles.singUpText}>
-          Увійти
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.signIn}>
-        <Text style={styles.signInText}>Немає акаунту? Зареєструватися</Text>
-      </TouchableOpacity>
-    </View>
+            <TouchableOpacity style={styles.singUp}>
+              <Text
+                onPress={() => {
+                  handleFormValue();
+                  navigation.navigate("Home", {
+                    screen: "PostScreen",
+                  });
+                }}
+                style={styles.singUpText}
+              >
+                Увійти
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Registration")}
+              style={styles.signIn}
+            >
+              <Text style={styles.signInText}>
+                Немає акаунту? Зареєструватися
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    height: "100%",
+  },
   container: {
     marginTop: "auto",
     marginLeft: "auto",
@@ -134,8 +168,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   containerKeyboardOpen: {
-    marginTop: Platform.OS === "ios" ? 240 : 280,
-    paddingTop: Platform.OS === "ios" ? 20 : 80,
+    marginTop: Platform.OS === "ios" ? 240 : 275,
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
+  },
+  image: {
+    flex: 1,
   },
   text: {
     fontFamily: "Roboto-Medium",
