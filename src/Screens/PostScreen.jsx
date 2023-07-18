@@ -1,8 +1,6 @@
-import { Platform, StyleSheet, View, Image, Text } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { StyleSheet, View, Image, Text } from "react-native";
 import UserPhoto from "../assets/images/userPhoto.jpg";
 
-const Tabs = createBottomTabNavigator();
 const PostScreen = () => {
   return (
     <View style={styles.wrapper}>
